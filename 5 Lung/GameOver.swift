@@ -11,12 +11,34 @@ import SpriteKit
 
 class GameOver: SKScene {
     
-    let background = SKSpriteNode(imageNamed:"Lights")
+    class overButton: SKSpriteNode {
+        
+        let screenSize = UIScreen.mainScreen().bounds
+        init(txt: String, y: CGFloat) {
+            let sizey: CGSize = scoreboardSize()
+            let gap = screenSize.width * 0.035
+            let width = ((sizey.width - gap) * 0.5)
+            super.init(texture: SKTexture(imageNamed: txt), color: SKColor.redColor(), size: CGSize(width: width, height: width * 0.3322))
+            self.position = CGPoint(x: screenSize.width / 2, y: y)
+            let remainder = (screenSize.width - sizey.width) / 2
+            if txt == "menu.png" {
+                self.name = "menu"
+                self.anchorPoint = CGPoint(x: 0, y: 1)
+                self.position.x = remainder
+            } else if txt == "restart.png" {
+                self.name = "restart"
+                self.anchorPoint = CGPoint(x: 1, y: 1)
+                self.position.x = screenSize.width - remainder
+            }
+            self.zPosition = 15
+        }
+        required init(coder aDecoder: NSCoder) {
+            fatalError("init(coder:) has not been implemented")
+        }
+    }
     
     var totalLung: Int?
     var highLung: Int?
-    let back = SKSpriteNode(imageNamed: "Menu")
-    let again = SKSpriteNode(imageNamed: "Restart")
     
     func changeScene(newScene: SKScene) {
         newScene.scaleMode = scaleMode
@@ -26,18 +48,12 @@ class GameOver: SKScene {
     
     override func didMoveToView(view: SKView) {
         
-        background.size = self.frame.size
-        background.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
-        background.zPosition = -2
-        self.addChild(background)
+        let width = self.frame.size.width
+        let height = self.frame.size.height
         
-        backgroundColor = SKColor(red: 105/255, green: 220/255, blue: 255/255, alpha: 1.0)
-        func pianoSound() {
-            let ayy = Int(arc4random_uniform(6))
-            var ayyy = "piano\(ayy).mp3"
-            runAction(SKAction.playSoundFileNamed(ayyy, waitForCompletion: false))
-        }
-        pianoSound()
+        let gap = width * 0.035
+        
+        self.addChild(bg(lights: true))
         
         let defaults = NSUserDefaults.standardUserDefaults()
         
@@ -49,7 +65,6 @@ class GameOver: SKScene {
                 highLung = highScore.toInt()
             }
         } else {
-            println("else")
             highLung = count
             defaults.setObject(count, forKey: "highScore")
         }
@@ -62,59 +77,60 @@ class GameOver: SKScene {
             totalLung = count
             defaults.setObject(count, forKey: "totalScore")
         }
+
         
-        let title = SKSpriteNode(imageNamed: "Game Over")
-        title.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.8 )
-        title.size = CGSize(width: 223, height: 140.5)
+        let title = SKSpriteNode(imageNamed:
+            "Game Over")
+        title.position = CGPoint(x: self.frame.size.width / 2, y: height * 0.75)
+        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            title.size = CGSize(width: width * 0.7, height: width * 0.474)
+        } else {
+            title.size = CGSize(width: width * 0.8, height: width * 0.54)
+        }
         self.addChild(title)
         
         let scoreboard = SKSpriteNode(imageNamed: "Scoreboard")
-        scoreboard.size = CGSize(width: 273.5, height: 140)
-        scoreboard.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2)
+        scoreboard.size = scoreboardSize()
+        scoreboard.position = CGPoint(x: self.frame.size.width / 2, y: title.position.y - title.size.height / 2 - gap*2 - scoreboard.size.height / 2)
         self.addChild(scoreboard)
         
-        var highScoreLabel = SKLabelNode(fontNamed: "KohinoorDevanagari-Medium")
-        highScoreLabel.position = CGPoint(x: self.frame.size.width / 2 + 60, y: self.frame.size.height / 2 - 20)
-        highScoreLabel.color = SKColor.yellowColor()
-        highScoreLabel.zPosition = 10
-        highScoreLabel.text = "\(highLung!)"
-        self.addChild(highScoreLabel)
+        let back = overButton(txt: "menu.png", y: scoreboard.position.y - (gap + scoreboardSize().height / 2))
+        let again = overButton(txt: "restart.png", y: scoreboard.position.y - (gap + scoreboardSize().height / 2))
         
-        var scoreText = SKLabelNode(fontNamed: "KohinoorDevanagari-Medium")
-        scoreText.text = "\(count)"
-        scoreText.zPosition = 10
-        scoreText.position = CGPoint(x: self.frame.size.width / 2 - 60, y: self.frame.size.height / 2 - 20)
-        self.addChild(scoreText)
-        
-        println("total score: \(totalLung!)")
-        
-        again.size = CGSize(width: 128, height: 42.5)
-        again.position = CGPoint(x: self.frame.size.width / 2 + 72.75, y: self.frame.size.height / 2 - 105)
-        again.zPosition = 5
+        self.addChild(back)
         self.addChild(again)
         
-        back.size = again.size
-        back.position = CGPoint(x: self.frame.size.width / 2 - 72.75, y: self.frame.size.height / 2 - 105)
-        back.zPosition = 6
-        self.addChild(back)
+        let highScoreLabel = SKLabelNode(text: "\(highLung!)")
+        highScoreLabel.fontName = "Superclarendon-Regular"
+        highScoreLabel.position = CGPoint(x: scoreboard.position.x + scoreboard.size.width * 0.235, y: scoreboard.position.y - scoreboard.size.height * 0.093)
+        highScoreLabel.verticalAlignmentMode = .Center
+        highScoreLabel.zPosition = 5
+        highScoreLabel.fontSize = scoreboard.size.height * 0.23
         
-        //let sparks = SKEmitterNode(fileNamed: "HiScore.sks")
-        //sparks.position = highScoreLabel.position
-        //self.addChild(sparks)
+        self.addChild(highScoreLabel)
+        
+        let scoreText = highScoreLabel.copy() as! SKLabelNode
+        scoreText.text = "\(count)"
+        scoreText.position.x = scoreboard.position.x - scoreboard.size.width * 0.235
+        self.addChild(scoreText)
         
     }
     
     override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
+            
             let location = (touch as! UITouch).locationInNode(self)
-            if again.containsPoint(location) {
-                let playAgain = GameScene(size: self.size)
-                changeScene(playAgain)
-                
-            } else if back.containsPoint(location) {
-                let menu = mainMenu(size: self.size)
-                changeScene(menu)
-                
+            let nodey = self.nodeAtPoint(location)
+            
+            if let butt = nodey as? overButton {
+                if butt.name == "restart" {
+                    let playAgain = GameScene(size: self.size)
+                    changeScene(playAgain)
+                    
+                } else if butt.name == "menu" {
+                    let menu = mainMenu(size: self.size)
+                    changeScene(menu)
+                }
             }
         }
         

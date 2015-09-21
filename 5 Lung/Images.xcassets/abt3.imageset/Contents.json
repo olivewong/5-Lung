@@ -2,17 +2,18 @@
   "images" : [
     {
       "idiom" : "universal",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "abt3.png"
     },
     {
       "idiom" : "universal",
       "scale" : "2x",
-      "filename" : "music@2x.png"
+      "filename" : "abt3@2x.png"
     },
     {
       "idiom" : "universal",
       "scale" : "3x",
-      "filename" : "music.png"
+      "filename" : "abt3@3x.png"
     }
   ],
   "info" : {

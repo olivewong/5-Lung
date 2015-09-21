@@ -4,19 +4,28 @@ import SpriteKit
 class GameViewController: UIViewController {
     
     override func viewDidLoad() {
+        //let value = UIInterfaceOrientation.LandscapeLeft.rawValue
+       // UIDevice.currentDevice().setValue(value, forKey: "orientation")
         super.viewDidLoad()
+        prepareBackgroundMusic("menu.mp3")
         let scene = mainMenu(size: view.bounds.size)
         let skView = view as! SKView
-        skView.showsFPS = true
-        skView.showsNodeCount = true
+        skView.showsFPS = false
+        skView.showsNodeCount = false
         skView.ignoresSiblingOrder = true
         scene.scaleMode = .ResizeFill
         skView.presentScene(scene)
+        UIApplication.sharedApplication().idleTimerDisabled = true
     }
-    
-    
+    override func shouldAutorotate() -> Bool {
+        return false
+    }
     
     override func prefersStatusBarHidden() -> Bool {
         return true
+    }
+    
+    override func supportedInterfaceOrientations() -> Int {
+        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
     }
 }

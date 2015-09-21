@@ -1,16 +1,8 @@
-//
-//  MainMenu.swift
-//  trick
-//
-//  Created by 😎 on 7/5/15.
-//  Copyright (c) 2015 neuky. All rights reserved.
-//
-
-import Foundation
-
 import Foundation
 import SpriteKit
+import AVFoundation
 
+var loadNumber: Int = 0
 class mainMenu: SKScene {
     
     let patrick = SKSpriteNode(imageNamed: "singingpatrick.png")
@@ -19,46 +11,38 @@ class mainMenu: SKScene {
         newScene.scaleMode = scaleMode
         self.view?.presentScene(newScene, transition: transition)
     }
-        class Button: SKSpriteNode {
-        let screenSize = UIScreen.mainScreen().bounds
-        init(texture: String, name: String, xpos: CGFloat) {
-            let texture = SKTexture(imageNamed: texture)
-            super.init(texture: texture, color: nil, size: CGSizeMake(CGFloat(screenSize.height * 0.11), CGFloat(screenSize.height * 0.11)))
-            self.name = name
-            self.position.y = screenSize.height * 0.134
-            self.position.x = screenSize.width * xpos
-        }
-        func touchDown() {
-            self.position.y -= 5
-        }
-        func touchUp() {
-            self.position.y += 5
-        }
-        required init(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-    }
     
     override func didMoveToView(view: SKView) {
+        
+        loadNumber++
+        
+        checkMusic()
+        
         let height = self.frame.size.height
         let width = self.frame.size.width
 
-        let background = SKSpriteNode(imageNamed: "Lights")
-        background.size = CGSize(width: width, height: height)
-        background.position = CGPoint(x: width / 2, y: height / 2)
-        background.zPosition = -2
-        self.addChild(background)
+        self.addChild(bg(lights: true))
         
-        let q = Button(texture: "q.png", name: "about", xpos: 0.75)
+        var muspic = "Music"
+
+        if !musicOn {
+            muspic = "No Music"
+        } else {
+            if loadNumber == 1 {
+                playBackgroundMusic()
+            }
+        }
+        
+        let q = Global.Button(texture: "q.png", name: "about", xpos: 0.75)
         self.addChild(q)
         
-        let play = Button(texture: "play.png", name: "play", xpos: 0.5)
+        let play = Global.Button(texture: "play.png", name: "play", xpos: 0.5)
         self.addChild(play)
         
-        let music = Button(texture: "Music", name: "music", xpos: 0.25)
+        let music = Global.Button(texture: muspic, name: "music", xpos: 0.25)
         self.addChild(music)
         
-        patrick.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2 - 15)
+        patrick.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.46)
         patrick.size = CGSizeMake(height * 0.187, height * 0.45)
         patrick.zPosition = 5
         self.addChild(patrick)
@@ -74,7 +58,7 @@ class mainMenu: SKScene {
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             let nodey = self.nodeAtPoint(location)
-            if let myClass = nodey as? Button {
+            if let myClass = nodey as? Global.Button {
                 myClass.touchDown()
             }
         }
@@ -85,7 +69,7 @@ class mainMenu: SKScene {
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
             let nodey = self.nodeAtPoint(location)
-            if let myClass = nodey as? Button {
+            if let myClass = nodey as? Global.Button {
                 myClass.touchUp()
             }
             if let name = nodey.name {
@@ -96,10 +80,6 @@ class mainMenu: SKScene {
                     patrick.runAction(SKAction.moveTo(CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2 + 15), duration: 0.6))
                     let newScene = about(size: self.size)
                     self.changeScene(newScene, transition: SKTransition.crossFadeWithDuration(1.5))
-                } else if name == "music" {
-                    if let spriteNode = nodey as? SKSpriteNode {
-                        spriteNode.texture = SKTexture(imageNamed: "No Music")
-                    }
                 }
             }
         }

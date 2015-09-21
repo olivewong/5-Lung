@@ -6,21 +6,23 @@
     },
     {
       "idiom" : "iphone",
-      "scale" : "2x"
+      "scale" : "2x",
+      "filename" : "scoreboardnew@2x.png"
     },
     {
       "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "scoreboard.png"
+      "filename" : "scoreboardnew.png"
     },
     {
       "idiom" : "ipad",
-      "scale" : "1x"
+      "scale" : "1x",
+      "filename" : "scoreboardipad1x.png"
     },
     {
       "idiom" : "ipad",
       "scale" : "2x",
-      "filename" : "scoreboard-1.png"
+      "filename" : "scoreboardipad2x.png"
     }
   ],
   "info" : {

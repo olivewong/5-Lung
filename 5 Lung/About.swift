@@ -9,32 +9,49 @@
 import Foundation
 import SpriteKit
 import UIKit
+
 class about: SKScene, SKPhysicsContactDelegate {
     func changeScene(newScene: SKScene) {
         newScene.scaleMode = scaleMode
-        let reveal = SKTransition.revealWithDirection(.Right, duration: 1.3)
+        let reveal = SKTransition.fadeWithDuration(1.3)
         self.view?.presentScene(newScene, transition: reveal)
     }
+    let tap = SKSpriteNode(imageNamed: "tap.png")
     
-    //actions
+    let link = SKLabelNode(text: "Visit 5lung.tk 〉")
+    
+    let fall = SKAction.moveToY(UIScreen.mainScreen().bounds.height * 0.567, duration: 1.6)
+    
+    let actionwait = SKAction.waitForDuration(0.5)
+    var timeSecond: Double = 0
+    var reminded = false
+    
+    let backg = bg(lights: false) as SKSpriteNode
     let skeletrick = SKSpriteNode()
-    let fadeOut = SKAction.fadeOutWithDuration(0.5)
+    let fadeOut = SKAction.fadeOutWithDuration(0.35)
     let fadeIn = SKAction.fadeInWithDuration(1)
     let rightUp = SKAction.moveByX(2.2, y: 1.5, duration: 0.5)
-    let fall = SKAction.moveToY(350, duration: 1.4)
     let wait = SKAction.waitForDuration(1)
+    var patricks = SKNode()
+    var statics = SKNode()
+    var others = SKNode()
     
-    var bg = SKSpriteNode(imageNamed:"No Lights")
-    let bigtrick = SKSpriteNode(imageNamed: "sad.png")
+    let bigtrick = SKSpriteNode(imageNamed: "fadedtrick.png")
     var rect = SKSpriteNode()
     let piano = SKSpriteNode(imageNamed: "Piano")
-    let back = SKSpriteNode(imageNamed: "Back")
-    let patrick = SKSpriteNode()
+    let back = SKSpriteNode()
+    let patrick = SKSpriteNode(imageNamed: "singingpatrick.png")
     let sadtrick = SKSpriteNode()
     let notes = SKLabelNode(fontNamed: "KohinoorDevanagari-Medium")
     let lights = SKSpriteNode(imageNamed: "Lights")
     
     override func didMoveToView(view: SKView) {
+        
+        self.addChild(statics)
+        self.addChild(patricks)
+        self.addChild(others)
+        
+        statics.addChild(backg)
         
         self.physicsWorld.gravity = CGVectorMake(0, -7.6)
         physicsWorld.contactDelegate = self;
@@ -45,9 +62,9 @@ class about: SKScene, SKPhysicsContactDelegate {
         lights.size = CGSizeMake(width, height)
         lights.zPosition = 0
         lights.position = CGPointMake(width / 2, height / 2)
-        self.addChild(lights)
+        statics.addChild(lights)
         
-        piano.size = CGSize(width: 84.8, height: 58.4)
+        piano.size = CGSize(width: self.frame.size.width * 0.21, height: self.frame.size.width * 0.146)
         piano.position = CGPoint(x: width * 0.65, y: height + 50)
         piano.physicsBody = SKPhysicsBody(rectangleOfSize: piano.size)
         piano.physicsBody?.dynamic = true
@@ -60,19 +77,32 @@ class about: SKScene, SKPhysicsContactDelegate {
         }
         back.position = CGPoint(x: 10, y: height - 10)
         back.anchorPoint = CGPointMake(0, 1)
-        self.addChild(back)
-        notes.text = "🎶"
-        notes.position = CGPoint(x: width / 2 + 40, y: height / 2 + 45)
-        notes.alpha = 0
-        notes.zPosition = 20
-        self.addChild(notes)
-        notes.runAction(fadeIn)
-        notes.runAction(rightUp)
+        
+        let backtwo = SKLabelNode(text: "〈 Back")
+        backtwo.fontName = "KohinoorDevanagari-Light"
+        backtwo.horizontalAlignmentMode = .Left
+        backtwo.fontSize = 20
+        backtwo.fontColor = SKColor.whiteColor()
+        backtwo.position = CGPointMake(height * 0.03, height * 0.95)
+        statics.addChild(backtwo)
+        
+        
+        link.position = CGPointMake(width * 0.96, height * 0.95)
+        link.horizontalAlignmentMode = .Right
+        link.fontSize = 20
+        link.fontColor = SKColor.whiteColor()
+        link.fontName = "KohinoorDevanagari-Light"
+        self.addChild(link)
+        
         
         bigtrick.position = CGPoint(x: width / 2, y: 0)
-        bigtrick.size = CGSize(width: width * 0.8, height: width * 1.053)
+        let sizey = bigtrick.texture!.size()
+        let boo = sizey.height * 0.9 * width / sizey.width
+        bigtrick.size = CGSize(width: width * 0.9, height: boo)
+        bigtrick.color = SKColor.whiteColor()
+        bigtrick.colorBlendFactor = 0.2
         bigtrick.alpha = 0
-        self.addChild(bigtrick)
+        patricks.addChild(bigtrick)
         
         rect.texture = SKTexture(imageNamed: "Abt0")
         rect.size = CGSize(width: width * 0.95, height: width * 0.3884)
@@ -82,48 +112,76 @@ class about: SKScene, SKPhysicsContactDelegate {
         }
         rect.position = CGPoint(x: width / 2, y: width * 0.22)
         rect.zPosition = 10
-        self.addChild(rect)
+        statics.addChild(rect)
         
-        let patsition: CGFloat = rect.position.y * 2
         
-        patrick.texture = SKTexture(imageNamed: "singingpatrick.png")
-        patrick.size = CGSizeMake(height * 0.187, height * 0.45)
-        patrick.position = CGPoint(x: width * 0.5, y: height / 2 - 15)
-        self.addChild(patrick)
-        patrick.runAction(SKAction.scaleTo(1.25214, duration: 0.4))
-        //move to half of patrick's (post-scale) height (0.2817) - the difference between him and sadtrick .563463/2 - (.563463-.54)
-        patrick.runAction(SKAction.moveToY(patsition + height * 0.2583, duration: 0.4))
-
+        var actionrun = SKAction.runBlock({
+            self.timeSecond += 0.5
+        })
+        
+        var patsition: CGFloat = rect.position.y * 2
+        
+        tap.size = CGSize(width: width * 0.244, height: 0.201 * width)
+        tap.position.y = patsition + height * 0.378
+        tap.position.x = width / 2 + height / 5
+        func removeTap() {
+            tap.removeFromParent()
+        }
+        
+        self.runAction(SKAction.repeatActionForever(SKAction.sequence([actionwait,
+            actionrun,
+            SKAction.runBlock() {
+                if self.n < 3 && self.timeSecond > 3.5 && self.reminded == false {
+                    self.addChild(self.tap)
+                    self.reminded = true
+                }
+            }
+            ])))
+        
+        
+        if UIDevice.currentDevice().userInterfaceIdiom != .Pad {
+            patsition += height * 0.026
+        }
+        
         sadtrick.texture = SKTexture(imageNamed: "sadsmall.png")
         sadtrick.size = CGSize(width: height * 0.23415, height: height * 0.54)
-        //sadtrick.position = CGPoint(x: width / 2, y: patsition + height * sadtrick.size.height / 2)
         sadtrick.position = CGPoint(x: width / 2, y: patsition + sadtrick.size.height / 2)
         sadtrick.alpha = 0
-        sadtrick.zPosition = 3
+        sadtrick.zPosition = 5
         sadtrick.physicsBody = SKPhysicsBody(rectangleOfSize: sadtrick.size)
         sadtrick.physicsBody?.dynamic = true
         sadtrick.physicsBody?.affectedByGravity = false
-        self.addChild(sadtrick)
+        patricks.addChild(sadtrick)
+        
+        notes.text = "🎶"
+        notes.position = CGPoint(x: width * 0.66, y: patsition + sadtrick.size.height * 0.55)
+        notes.alpha = 0
+        notes.zPosition = 20
+        statics.addChild(notes)
+        notes.runAction(fadeIn)
+        notes.runAction(rightUp)
+        
+        patrick.size = CGSizeMake(height * 0.187, height * 0.45)
+        patrick.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.46)
+        patrick.zPosition = 3
+        patricks.addChild(patrick)
+        patrick.runAction(SKAction.scaleTo(1.25214, duration: 0.4))
+        patrick.runAction(SKAction.moveToY(patsition + height * 0.2615, duration: 0.4))
         
         skeletrick.texture = SKTexture(imageNamed: "skeletrick.png")
         skeletrick.size = CGSize(width: height * 0.2811, height: height * 0.6304)
         skeletrick.position = CGPointMake(width * 0.462, patsition + skeletrick.size.height / 2)
         skeletrick.zPosition = 2
         skeletrick.alpha = 0
-        self.addChild(skeletrick)
+        patricks.addChild(skeletrick)
         
-        bg.position = CGPoint(x: width / 2, y: height / 2)
-        bg.zPosition = -2
-        bg.color = SKColor.blackColor()
-        bg.size = CGSizeMake(width, height)
-        self.addChild(bg)
     }
     
     func lung(pos: CGFloat) {
         let lung = SKSpriteNode(imageNamed:"Lung")
         lung.position = CGPoint(x: self.frame.size.width * pos, y: self.frame.size.height + 50)
-        lung.size = CGSize(width: 33.544, height: 46.552)
-        self.addChild(lung)
+        lung.size = GameScene().lungSize()
+        others.addChild(lung)
         let hide = SKAction.runBlock() {
             lung.hidden = true
         }
@@ -134,77 +192,100 @@ class about: SKScene, SKPhysicsContactDelegate {
         lung(n)
         let shrink = SKAction.scaleBy(0.8, duration: 0.5)
         let run = SKAction.moveToX(self.frame.size.width * n, duration: 0.6)
-        sadtrick.runAction(SKAction.moveToY(CGFloat(320.0), duration: 0.6))
+        sadtrick.runAction(SKAction.moveToY(sadtrick.position.y - sadtrick.size.height * 0.1, duration: 0.6))
         let actrick = SKAction.sequence([shrink, wait, run])
         sadtrick.runAction(actrick)
     }
     
     var n: Int = 0
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
-        for touch: AnyObject in touches {
-            n += 1
-            switch n {
-                case 1:
-                    notes.runAction(rightUp)
-                    notes.runAction(fadeOut)
-                case 2:
-                    ()
-                    //bg.runAction(SKAction.colorizeWithColorBlendFactor(0.5, duration: 1))
-                case 3:
-                    sadtrick.texture = SKTexture(imageNamed: "Patrick")
-                    skeletrick.runAction(fadeOut)
-                    sadtrick.runAction(fadeIn)
-                    bg.runAction(SKAction.colorizeWithColorBlendFactor(0, duration: 1))
-                default:
-                    println("tiddies")
+    
+    let timeWait = [0.5, 1, 0.5, 4, 0]
+    
+    var touchCount = 0
+    func endTouch(location: CGPoint) {
+        if n < 5 {
+            var a = "Abt\(n)"
+            if reminded {
+                tap.removeFromParent()
             }
+            rect.texture = SKTexture(imageNamed: a)
         }
+        switch n {
+        case 1:
+            notes.runAction(rightUp)
+            notes.runAction(fadeOut)
+            lights.runAction(SKAction.fadeOutWithDuration(0.35))
+            backg.runAction(SKAction.colorizeWithColorBlendFactor(0.05, duration: 0.42))
+            sadtrick.runAction(fadeIn)
+            patrick.runAction(SKAction.sequence([wait,fadeOut]))
+        case 2:
+            skeletrick.runAction(SKAction.fadeAlphaTo(1, duration: 1))
+            sadtrick.runAction(fadeOut)
+            notes.runAction(fadeOut)
+            notes.removeFromParent()
+        case 3:
+            sadtrick.texture = SKTexture(imageNamed: "Patrick")
+            skeletrick.runAction(fadeOut)
+            sadtrick.runAction(fadeIn)
+            backg.runAction(SKAction.colorizeWithColorBlendFactor(0, duration: 1))
+            self.GO(0.35)
+            self.runAction(SKAction.sequence([
+                wait,
+                SKAction.runBlock() {
+                    self.GO(0.6)
+                },
+                ]))
+        case 4:
+            others.addChild(piano)
+            skeletrick.removeFromParent()
+            bigtrick.runAction(SKAction.sequence([
+                wait,
+                wait,
+                SKAction.fadeAlphaTo(0.35, duration: 3.5),
+                wait,
+                SKAction.fadeAlphaTo(0.9, duration: 5)
+                ]))
+            bigtrick.runAction(SKAction.sequence([
+                wait,
+                wait,
+                SKAction.moveToY(bigtrick.size.height / 2 + rect.position.y + 30, duration: 2.4)
+                ]))
+            n++
+        default:
+            ()
+        }
+        timeSecond = 0
+        touchCount = 0
     }
+    
     override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
         for touch: AnyObject in touches {
-            if n < 5 {
-                var a = "Abt\(n)"
-                rect.texture = SKTexture(imageNamed: a)
-            }
+            touchCount++
             let location = touch.locationInNode(self)
             if back.containsPoint(location) {
                 let newScene = mainMenu(size: self.size)
                 changeScene(newScene)
+            } else if link.containsPoint(location) {
+                if let requestUrl = NSURL(string: "http://5lung.tk") {
+                    UIApplication.sharedApplication().openURL(requestUrl)
+                }
+            }
+            else if n >= 5 && rect.containsPoint(location) {
+                let newScene = GameScene(size: self.size)
+                changeScene(newScene)
             } else {
-                switch n {
-                case 1:
-                    lights.runAction(SKAction.fadeOutWithDuration(0.35))
-                    bg.runAction(SKAction.colorizeWithColorBlendFactor(0.1, duration: 0.42))
-                    sadtrick.runAction(fadeIn)
-                    patrick.runAction(SKAction.sequence([wait,fadeOut]))
-                case 2:
-                    //bg.color = SKColor(red: 21/255, green: 155/255, blue: 113/255, alpha: 1)
-                    skeletrick.runAction(SKAction.fadeAlphaTo(1, duration: 1))
-                    sadtrick.runAction(fadeOut)
-                    notes.runAction(fadeOut)
-                    notes.removeFromParent()
-                case 3:
-                    self.GO(0.35)
-                    self.runAction(SKAction.sequence([
-                        wait,
-                        SKAction.runBlock() {
-                            self.GO(0.6)
-                        },
-                        ]))
-                case 4:
-                    self.addChild(piano)
-                    bigtrick.runAction(SKAction.sequence([
-                        wait,
-                        SKAction.fadeAlphaTo(0.5, duration: 2.5)
-                        ]))
-                    bigtrick.runAction(SKAction.moveToY(bigtrick.size.height / 2 + rect.position.y + 30, duration: 2.4))
-                case 5:
-                    if rect.containsPoint(location) {
-                        let newScene = GameScene(size: self.size)
-                        changeScene(newScene)
+                if touchCount == 1 && n < 4 {
+                    n++
+                    if timeSecond >= timeWait[n-1] {
+                        endTouch(location)
+                    } else {
+                        self.runAction(SKAction.sequence([
+                            SKAction.waitForDuration(NSTimeInterval(timeWait[n-1] - timeSecond)),
+                            SKAction.runBlock() {
+                                self.endTouch(location)
+                            },
+                            ]))
                     }
-                default:
-                    ()
                 }
             }
         }

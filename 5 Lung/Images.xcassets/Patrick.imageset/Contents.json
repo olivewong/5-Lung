@@ -1,19 +1,34 @@
 {
   "images" : [
     {
-      "idiom" : "universal",
-      "scale" : "1x",
-      "filename" : "patrick.png"
+      "idiom" : "iphone",
+      "scale" : "1x"
     },
     {
-      "idiom" : "universal",
+      "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "patrick@2x 2.png"
+      "filename" : "patrick iphone 2x.png"
     },
     {
-      "idiom" : "universal",
+      "idiom" : "iphone",
+      "filename" : "patrick rtna 4.png",
+      "subtype" : "retina4",
+      "scale" : "2x"
+    },
+    {
+      "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "patrick@3x.png"
+      "filename" : "patrick iphone 3x.png"
+    },
+    {
+      "idiom" : "ipad",
+      "scale" : "1x",
+      "filename" : "patrick ipad 1x.png"
+    },
+    {
+      "idiom" : "ipad",
+      "scale" : "2x",
+      "filename" : "patrick ipad 2x.png"
     }
   ],
   "info" : {

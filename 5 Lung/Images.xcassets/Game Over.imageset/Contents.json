@@ -7,12 +7,12 @@
     {
       "idiom" : "iphone",
       "scale" : "2x",
-      "filename" : "gameoveriphone2x.png"
+      "filename" : "gameover-2x.png"
     },
     {
       "idiom" : "iphone",
       "scale" : "3x",
-      "filename" : "gameoveriphone3x.png"
+      "filename" : "gameover-3x.png"
     },
     {
       "idiom" : "ipad",
