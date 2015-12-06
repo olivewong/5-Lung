@@ -16,6 +16,7 @@ class GameViewController: UIViewController {
         scene.scaleMode = .ResizeFill
         skView.presentScene(scene)
         UIApplication.sharedApplication().idleTimerDisabled = true
+        try! sickLungTunez()
     }
     override func shouldAutorotate() -> Bool {
         return false
@@ -25,7 +26,7 @@ class GameViewController: UIViewController {
         return true
     }
     
-    override func supportedInterfaceOrientations() -> Int {
-        return Int(UIInterfaceOrientationMask.Portrait.rawValue)
+    override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+        return [UIInterfaceOrientationMask.Portrait, UIInterfaceOrientationMask.PortraitUpsideDown]
     }
 }

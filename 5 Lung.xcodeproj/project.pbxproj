@@ -7,10 +7,17 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		5904D3D71C13E32000027144 /* xmassingingstump.png in Resources */ = {isa = PBXBuildFile; fileRef = 5904D3D31C13E32000027144 /* xmassingingstump.png */; settings = {ASSET_TAGS = (); }; };
+		5904D3D81C13E32000027144 /* xmasmenumountains.png in Resources */ = {isa = PBXBuildFile; fileRef = 5904D3D41C13E32000027144 /* xmasmenumountains.png */; settings = {ASSET_TAGS = (); }; };
+		5904D3D91C13E32000027144 /* xmasgamestump.png in Resources */ = {isa = PBXBuildFile; fileRef = 5904D3D51C13E32000027144 /* xmasgamestump.png */; settings = {ASSET_TAGS = (); }; };
+		5904D3DA1C13E32000027144 /* xmasgamescenemountains.png in Resources */ = {isa = PBXBuildFile; fileRef = 5904D3D61C13E32000027144 /* xmasgamescenemountains.png */; settings = {ASSET_TAGS = (); }; };
 		591890B41B6F031B001FA192 /* pop.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 591890AC1B6F031B001FA192 /* pop.mp3 */; };
 		5920694D1B7ACC6300BC117D /* zap.wav in Resources */ = {isa = PBXBuildFile; fileRef = 5920694A1B7ACC6300BC117D /* zap.wav */; };
-		5932502D1B7A972A00F38C15 /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 5932502B1B7A972A00F38C15 /* menu.png */; };
-		5932502E1B7A972A00F38C15 /* restart.png in Resources */ = {isa = PBXBuildFile; fileRef = 5932502C1B7A972A00F38C15 /* restart.png */; };
+		592C4BC71BB3BEE100452F4B /* menu.png in Resources */ = {isa = PBXBuildFile; fileRef = 592C4BC31BB3BEE100452F4B /* menu.png */; };
+		592C4BC81BB3BEE100452F4B /* restart.png in Resources */ = {isa = PBXBuildFile; fileRef = 592C4BC41BB3BEE100452F4B /* restart.png */; };
+		592C4BCA1BB3BEE100452F4B /* singingpatrick.png in Resources */ = {isa = PBXBuildFile; fileRef = 592C4BC61BB3BEE100452F4B /* singingpatrick.png */; };
+		59382A061C1386CD00CB2492 /* Snow.sks in Resources */ = {isa = PBXBuildFile; fileRef = 59382A041C1386CD00CB2492 /* Snow.sks */; settings = {ASSET_TAGS = (); }; };
+		59382A071C1386CD00CB2492 /* spark.png in Resources */ = {isa = PBXBuildFile; fileRef = 59382A051C1386CD00CB2492 /* spark.png */; settings = {ASSET_TAGS = (); }; };
 		594601E31BA8DA6D00FADDA6 /* About2.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 594601E21BA8DA6D00FADDA6 /* About2.atlas */; };
 		594601E51BA8DA7600FADDA6 /* About.atlas in Resources */ = {isa = PBXBuildFile; fileRef = 594601E41BA8DA7500FADDA6 /* About.atlas */; };
 		595C91DA1B6937620073148F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 595C91D91B6937620073148F /* AppDelegate.swift */; };
@@ -40,10 +47,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		5904D3D31C13E32000027144 /* xmassingingstump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xmassingingstump.png; sourceTree = "<group>"; };
+		5904D3D41C13E32000027144 /* xmasmenumountains.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xmasmenumountains.png; sourceTree = "<group>"; };
+		5904D3D51C13E32000027144 /* xmasgamestump.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xmasgamestump.png; sourceTree = "<group>"; };
+		5904D3D61C13E32000027144 /* xmasgamescenemountains.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = xmasgamescenemountains.png; sourceTree = "<group>"; };
 		591890AC1B6F031B001FA192 /* pop.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = pop.mp3; sourceTree = "<group>"; };
 		5920694A1B7ACC6300BC117D /* zap.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = zap.wav; sourceTree = "<group>"; };
-		5932502B1B7A972A00F38C15 /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = menu.png; sourceTree = "<group>"; };
-		5932502C1B7A972A00F38C15 /* restart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = restart.png; sourceTree = "<group>"; };
+		592C4BC31BB3BEE100452F4B /* menu.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = menu.png; path = "More Images/menu.png"; sourceTree = "<group>"; };
+		592C4BC41BB3BEE100452F4B /* restart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = restart.png; path = "More Images/restart.png"; sourceTree = "<group>"; };
+		592C4BC61BB3BEE100452F4B /* singingpatrick.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = singingpatrick.png; path = "More Images/singingpatrick.png"; sourceTree = "<group>"; };
+		59382A041C1386CD00CB2492 /* Snow.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Snow.sks; sourceTree = "<group>"; };
+		59382A051C1386CD00CB2492 /* spark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = spark.png; sourceTree = "<group>"; };
 		594601E21BA8DA6D00FADDA6 /* About2.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = About2.atlas; sourceTree = "<group>"; };
 		594601E41BA8DA7500FADDA6 /* About.atlas */ = {isa = PBXFileReference; lastKnownFileType = folder.skatlas; path = About.atlas; sourceTree = "<group>"; };
 		595C91D41B6937620073148F /* 5 Lung.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "5 Lung.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -119,6 +133,8 @@
 				595C91E11B6937620073148F /* Main.storyboard */,
 				595C91DF1B6937620073148F /* GameViewController.swift */,
 				595C91D91B6937620073148F /* AppDelegate.swift */,
+				59382A041C1386CD00CB2492 /* Snow.sks */,
+				59382A051C1386CD00CB2492 /* spark.png */,
 			);
 			path = "5 Lung";
 			sourceTree = "<group>";
@@ -126,11 +142,16 @@
 		595C91D71B6937620073148F /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				5904D3D31C13E32000027144 /* xmassingingstump.png */,
+				5904D3D41C13E32000027144 /* xmasmenumountains.png */,
+				5904D3D51C13E32000027144 /* xmasgamestump.png */,
+				5904D3D61C13E32000027144 /* xmasgamescenemountains.png */,
+				592C4BC31BB3BEE100452F4B /* menu.png */,
+				592C4BC41BB3BEE100452F4B /* restart.png */,
+				592C4BC61BB3BEE100452F4B /* singingpatrick.png */,
 				5983572A1B7F16E800A6CF6E /* menu.mp3 */,
 				598357281B7F0DAC00A6CF6E /* lungtheme.mp3 */,
 				5920694A1B7ACC6300BC117D /* zap.wav */,
-				5932502B1B7A972A00F38C15 /* menu.png */,
-				5932502C1B7A972A00F38C15 /* restart.png */,
 				591890AC1B6F031B001FA192 /* pop.mp3 */,
 				595C91D81B6937620073148F /* Info.plist */,
 			);
@@ -199,7 +220,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0700;
-				LastUpgradeCheck = 0630;
+				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = neuky;
 				TargetAttributes = {
 					595C91D31B6937620073148F = {
@@ -238,16 +259,23 @@
 			files = (
 				595C92001B69469F0073148F /* LaunchScreen.xib in Resources */,
 				594601E51BA8DA7600FADDA6 /* About.atlas in Resources */,
+				5904D3DA1C13E32000027144 /* xmasgamescenemountains.png in Resources */,
 				595F217F1B7143DA00EDE221 /* Images.atlas in Resources */,
-				5932502D1B7A972A00F38C15 /* menu.png in Resources */,
+				592C4BC81BB3BEE100452F4B /* restart.png in Resources */,
+				592C4BC71BB3BEE100452F4B /* menu.png in Resources */,
 				595C91E51B6937620073148F /* Images.xcassets in Resources */,
+				5904D3D81C13E32000027144 /* xmasmenumountains.png in Resources */,
 				5983572B1B7F16E800A6CF6E /* menu.mp3 in Resources */,
 				598357291B7F0DAC00A6CF6E /* lungtheme.mp3 in Resources */,
+				5904D3D71C13E32000027144 /* xmassingingstump.png in Resources */,
 				591890B41B6F031B001FA192 /* pop.mp3 in Resources */,
 				595C91E31B6937620073148F /* Main.storyboard in Resources */,
+				5904D3D91C13E32000027144 /* xmasgamestump.png in Resources */,
+				59382A071C1386CD00CB2492 /* spark.png in Resources */,
 				5920694D1B7ACC6300BC117D /* zap.wav in Resources */,
-				5932502E1B7A972A00F38C15 /* restart.png in Resources */,
 				594601E31BA8DA6D00FADDA6 /* About2.atlas in Resources */,
+				59382A061C1386CD00CB2492 /* Snow.sks in Resources */,
+				592C4BCA1BB3BEE100452F4B /* singingpatrick.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -326,6 +354,7 @@
 				COPY_PHASE_STRIP = NO;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -396,8 +425,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "5 Lung/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crapple.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_SIZE = 4096x4096;
@@ -413,8 +443,9 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				INFOPLIST_FILE = "5 Lung/Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 7.1;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "com.crapple.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SPRITEKIT_TEXTURE_ATLAS_SIZE = 4096x4096;
@@ -436,6 +467,7 @@
 				);
 				INFOPLIST_FILE = "5 LungTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "neuky.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/5 Lung.app/5 Lung";
 			};
@@ -451,6 +483,7 @@
 				);
 				INFOPLIST_FILE = "5 LungTests/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = "neuky.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/5 Lung.app/5 Lung";
 			};

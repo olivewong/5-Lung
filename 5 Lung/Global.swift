@@ -15,6 +15,7 @@ var soundOn = false
 var musicStarted: Bool = false
 
 var backgroundMusicPlayer: AVAudioPlayer!
+var gameMusic: AVAudioPlayer!
 
 let blank = SKNode()
 
@@ -30,9 +31,9 @@ func scoreboardSize() -> CGSize {
 
 func bg(lights lights: Bool) -> SKSpriteNode {
     let screenSize = UIScreen.mainScreen().bounds
-    var texture = "Lights"
+    let texture = "Lights.png"
     if !lights {
-        var texture = "No Lights"
+        let texture = "No Lights.png"
     }
     let background: SKSpriteNode = SKSpriteNode(imageNamed: texture)
     background.size = CGSize(width: screenSize.width, height: screenSize.height)
@@ -63,7 +64,12 @@ func prepareBackgroundMusic(filename: String) {
         return
     }
     var error: NSError? = nil
-    backgroundMusicPlayer = AVAudioPlayer(contentsOfURL: url, error: &error)
+    do {
+        backgroundMusicPlayer = try AVAudioPlayer(contentsOfURL: url!)
+    } catch let error1 as NSError {
+        error = error1
+        backgroundMusicPlayer = nil
+    }
     if backgroundMusicPlayer == nil {
         return
     }
@@ -71,7 +77,7 @@ func prepareBackgroundMusic(filename: String) {
     backgroundMusicPlayer.prepareToPlay()
 }
 func playBackgroundMusic() {
-        musicStarted = true
+    musicStarted = true
     if musicOn {
         backgroundMusicPlayer.play()
     }
@@ -112,8 +118,25 @@ func toggleSound() {
 
 let url = NSBundle.mainBundle().URLForResource(
     "lungtheme.mp3", withExtension: nil)
-var error: NSError? = nil
-let gameMusic = AVAudioPlayer(contentsOfURL: url, error: &error)
+/*
+
+init() {
+    do {
+        try gameMusic = AVAudioPlayer(contentsOfURL: url)
+        //Handle the error
+    } catch {
+        print("oops")
+    }
+    
+}
+*/
+
+func sickLungTunez() throws {
+    gameMusic = try AVAudioPlayer(contentsOfURL: url!)
+}
+
+//var error: NSError? = nil
+//let gameMusic = AVAudioPlayer(contentsOfURL: url, error: &error)
 var gameMusicPlaying: Bool = false
 
 func changeMusic(node: SKScene) {
@@ -172,15 +195,16 @@ public class Global {
             self.name = name
             self.position.y = screenSize.height * 0.134
             self.position.x = screenSize.width * xpos
+            self.zPosition = 5
         }
         func touchDown() {
             self.position.y -= 4
             if self.name == "music" {
                 toggleMusic()
                 if musicOn {
-                    self.texture = SKTexture(imageNamed: "Music")
+                    self.texture = SKTexture(imageNamed: "Music.png")
                 } else {
-                    self.texture = SKTexture(imageNamed: "No Music")
+                    self.texture = SKTexture(imageNamed: "No Music.png")
                 }
             }
         }
@@ -192,5 +216,5 @@ public class Global {
         }
     }
 }
-    
+
 

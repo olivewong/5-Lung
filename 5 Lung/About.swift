@@ -38,12 +38,12 @@ class about: SKScene, SKPhysicsContactDelegate {
     
     let bigtrick = SKSpriteNode(imageNamed: "fadedtrick.png")
     var rect = SKSpriteNode()
-    let piano = SKSpriteNode(imageNamed: "Piano")
+    let piano = SKSpriteNode(imageNamed: "Piano.png")
     let back = SKSpriteNode()
     let patrick = SKSpriteNode(imageNamed: "singingpatrick.png")
     let sadtrick = SKSpriteNode()
     let notes = SKLabelNode(fontNamed: "KohinoorDevanagari-Medium")
-    let lights = SKSpriteNode(imageNamed: "Lights")
+    let lights = SKSpriteNode(imageNamed: "Lights.png")
     
     override func didMoveToView(view: SKView) {
         
@@ -104,7 +104,7 @@ class about: SKScene, SKPhysicsContactDelegate {
         bigtrick.alpha = 0
         patricks.addChild(bigtrick)
         
-        rect.texture = SKTexture(imageNamed: "Abt0")
+        rect.texture = SKTexture(imageNamed: "abt0.png")
         rect.size = CGSize(width: width * 0.95, height: width * 0.3884)
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             rect.size.width = rect.size.width * 0.8
@@ -178,7 +178,7 @@ class about: SKScene, SKPhysicsContactDelegate {
     }
     
     func lung(pos: CGFloat) {
-        let lung = SKSpriteNode(imageNamed:"Lung")
+        let lung = SKSpriteNode(imageNamed:"Lung.png")
         lung.position = CGPoint(x: self.frame.size.width * pos, y: self.frame.size.height + 50)
         lung.size = GameScene().lungSize()
         others.addChild(lung)
@@ -204,7 +204,7 @@ class about: SKScene, SKPhysicsContactDelegate {
     var touchCount = 0
     func endTouch(location: CGPoint) {
         if n < 5 {
-            var a = "Abt\(n)"
+            var a = "abt\(n).png"
             if reminded {
                 tap.removeFromParent()
             }
@@ -224,7 +224,7 @@ class about: SKScene, SKPhysicsContactDelegate {
             notes.runAction(fadeOut)
             notes.removeFromParent()
         case 3:
-            sadtrick.texture = SKTexture(imageNamed: "Patrick")
+            sadtrick.texture = SKTexture(imageNamed: "Patrick.png")
             skeletrick.runAction(fadeOut)
             sadtrick.runAction(fadeIn)
             backg.runAction(SKAction.colorizeWithColorBlendFactor(0, duration: 1))
@@ -258,7 +258,7 @@ class about: SKScene, SKPhysicsContactDelegate {
         touchCount = 0
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch: AnyObject in touches {
             touchCount++
             let location = touch.locationInNode(self)

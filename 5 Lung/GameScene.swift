@@ -12,8 +12,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     let motionManager: CMMotionManager = CMMotionManager()
     
-    let bg = SKSpriteNode(imageNamed: "No Lights")
-    let patrick = SKSpriteNode(imageNamed: "Patrick")
+    let bg = SKSpriteNode(imageNamed: "No Lights.png")
+    let patrick = SKSpriteNode(imageNamed: "xmasgamestump.png")
     var score = SKLabelNode(fontNamed: "Superclarendon-Light")
     let scoreBG = SKSpriteNode(imageNamed: "Score")
     
@@ -62,6 +62,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         motionManager.startAccelerometerUpdates()
         
+        let mountains = SKSpriteNode(imageNamed: "xmasgamescenemountains.png")
+        mountains.anchorPoint = CGPoint(x: 0.5, y: 0)
+        mountains.position = CGPoint(x: self.frame.size.width / 2, y: 0)
+        mountains.size = CGSize(width: self.frame.size.width, height: self.frame.size.width * 0.224)
+        mountains.zPosition = -1
+        self.addChild(mountains)
+        
         count = 0
         let screenSize = UIScreen.mainScreen().bounds
         
@@ -69,7 +76,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             
             let screenSize = UIScreen.mainScreen().bounds
             init() {
-                super.init(texture: SKTexture(imageNamed: "Lung"), color: SKColor.blueColor(), size: GameScene().lungSize())
+                super.init(texture: SKTexture(imageNamed: "Lung.png"), color: SKColor.blueColor(), size: GameScene().lungSize())
                 self.name = name
                 self.position = CGPoint(x: self.frame.size.width * GameScene().xPos(), y: self.frame.size.height + 80)
                 self.hidden = true
@@ -140,8 +147,15 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let width = self.frame.size.width
         let height = self.frame.size.height
         
+        let path = NSBundle.mainBundle().pathForResource("Snow", ofType: "sks")
+        let itSnow = NSKeyedUnarchiver.unarchiveObjectWithFile(path!) as! SKEmitterNode
+        itSnow.position = CGPoint(x: width / 2, y: self.size.height)
+        itSnow.zPosition = 4
+        itSnow.particlePositionRange = CGVector(dx: width, dy: height)
+        self.addChild(itSnow)
+        
         bg.size = self.frame.size
-        bg.zPosition = -1
+        bg.zPosition = -2
         bg.position = CGPointMake(width / 2, self.frame.size.height / 2)
         
         self.addChild(bg)
@@ -162,7 +176,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         patrick.physicsBody?.collisionBitMask = physicsCategory.Border
         patrick.physicsBody?.contactTestBitMask = physicsCategory.lung | physicsCategory.Border
         patrick.physicsBody?.mass = 0.03
-        patrick.physicsBody?.restitution = 0.1
+        patrick.physicsBody?.restitution = 0.05
         patrick.name = "mr. stump"
         self.addChild(patrick)
         
@@ -172,7 +186,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         let left = SKShapeNode(rectOfSize: CGSize(width: 1, height: height))
-        left.position = CGPoint(x: 0, y: height / 2 + 7)
+        left.position = CGPoint(x: -3, y: height / 2 + 7)
         left.alpha = 0
         left.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 1, height: height))
         left.physicsBody?.affectedByGravity = false
@@ -182,8 +196,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         left.physicsBody?.collisionBitMask = physicsCategory.Trick
         self.addChild(left)
         
-        var right = left.copy() as! SKShapeNode
-        right.position.x = width
+        let right = left.copy() as! SKShapeNode
+        right.position.x = width + 3
         self.addChild(right)
         
         scoreBG.size = CGSizeMake(155, 56)
@@ -203,7 +217,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(score)
         
         let stage = SKShapeNode(rectOfSize: CGSize(width: width + 10, height: height * 0.018))
-        stage.fillColor = SKColor(red: 64/255, green: 192/255, blue: 212/255, alpha: 0.4)
+        stage.fillColor = SKColor(red: 64/255, green: 192/255, blue: 212/255, alpha: 0.05)
         stage.position = CGPoint(x: width / 2, y: 0)
         stage.lineWidth = 0
         stage.zPosition = 0
@@ -226,10 +240,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let glowy = SKAction.colorizeWithColor(UIColor(red: 1.0, green: 217/255, blue: 226/255, alpha: 1.0), colorBlendFactor: CGFloat(0.25), duration: 0.2)
         let gloww = SKAction.sequence([
             glowy,
-            SKAction.waitForDuration(0.01),
             SKAction.colorizeWithColorBlendFactor(0, duration: 0.2),
             ])
-        if patrick.colorBlendFactor < 0.02 {
+        if patrick.colorBlendFactor < 0.01 {
             patrick.runAction(gloww)
         }
     }
@@ -361,7 +374,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     
     func movePatrick(currentTime: CFTimeInterval) {
         if let data = motionManager.accelerometerData {
-            if (fabs(data.acceleration.x) > 0.2) {
+            if (fabs(data.acceleration.x) > 0.17) {
                 /* iphone
                 patrick.physicsBody!.applyImpulse(CGVectorMake(0.5 * CGFloat(data.acceleration.x), 0))
                 patrick.physicsBody!.applyForce(CGVectorMake(60 * CGFloat(data.acceleration.x), 0))
@@ -373,11 +386,11 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 */
                 
                 if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                    patrick.physicsBody!.applyImpulse(CGVectorMake(self.frame.size.width * 0.0005 * CGFloat(data.acceleration.x), 0))
-                    patrick.physicsBody!.applyForce(CGVectorMake(self.frame.size.width * 0.1 * CGFloat(data.acceleration.x), 0))
+                    patrick.physicsBody!.applyImpulse(CGVectorMake(self.frame.size.width * 0.0006 * CGFloat(data.acceleration.x), 0))
+                    patrick.physicsBody!.applyForce(CGVectorMake(self.frame.size.width * 0.15 * CGFloat(data.acceleration.x), 0))
                 } else {
                     patrick.physicsBody!.applyImpulse(CGVectorMake(self.frame.size.width * 0.001 * CGFloat(data.acceleration.x), 0))
-                    patrick.physicsBody!.applyForce(CGVectorMake(self.frame.size.width * 0.155 * CGFloat(data.acceleration.x), 0))
+                    patrick.physicsBody!.applyForce(CGVectorMake(self.frame.size.width * 0.125 * CGFloat(data.acceleration.x), 0))
                 }
                 
                 // original patrick.physicsBody!.applyForce(CGVectorMake(110 * CGFloat(data.acceleration.x), 0))
@@ -385,7 +398,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
     }
     
-    override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
         
         for touch: AnyObject in touches {
             let location = touch.locationInNode(self)
@@ -408,7 +421,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func createPianoNode() {
-        let piano = SKSpriteNode(imageNamed: "Piano")
+        let piano = SKSpriteNode(imageNamed: "Piano.png")
         let pianoWidth = self.frame.size.width * 0.23
         //.689
         piano.size = CGSize(width: pianoWidth, height: pianoWidth * 0.693)

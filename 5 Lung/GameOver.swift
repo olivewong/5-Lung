@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import UIKit
 import SpriteKit
 
 class GameOver: SKScene {
@@ -58,19 +59,26 @@ class GameOver: SKScene {
         let defaults = NSUserDefaults.standardUserDefaults()
         
         if let highScore = defaults.stringForKey("highScore") {
-            if count > highScore.toInt() {
+            if count > Int(highScore) {
                 defaults.setObject(count, forKey: "highScore")
                 highLung = count
             } else {
-                highLung = highScore.toInt()
+                highLung = Int(highScore)
             }
         } else {
             highLung = count
             defaults.setObject(count, forKey: "highScore")
         }
         
+        let mountains = SKSpriteNode(imageNamed: "xmasgamescenemountains.png")
+        mountains.anchorPoint = CGPoint(x: 0.5, y: 0)
+        mountains.position = CGPoint(x: self.frame.size.width / 2, y: 0)
+        mountains.size = CGSize(width: self.frame.size.width, height: self.frame.size.width * 0.224)
+        mountains.zPosition = 1
+        self.addChild(mountains)
+        
         if let totalScore = defaults.stringForKey("totalScore") {
-            var boob = totalScore.toInt()! + count
+            var boob = Int(totalScore)! + count
             totalLung = boob
             defaults.setObject(boob, forKey: "totalScore")
         } else {
@@ -80,7 +88,7 @@ class GameOver: SKScene {
 
         
         let title = SKSpriteNode(imageNamed:
-            "Game Over")
+            "Game Over.png")
         title.position = CGPoint(x: self.frame.size.width / 2, y: height * 0.75)
         if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
             title.size = CGSize(width: width * 0.7, height: width * 0.474)
@@ -89,7 +97,7 @@ class GameOver: SKScene {
         }
         self.addChild(title)
         
-        let scoreboard = SKSpriteNode(imageNamed: "Scoreboard")
+        let scoreboard = SKSpriteNode(imageNamed: "Scoreboard.png")
         scoreboard.size = scoreboardSize()
         scoreboard.position = CGPoint(x: self.frame.size.width / 2, y: title.position.y - title.size.height / 2 - gap*2 - scoreboard.size.height / 2)
         self.addChild(scoreboard)
@@ -109,6 +117,7 @@ class GameOver: SKScene {
         
         self.addChild(highScoreLabel)
         
+        
         let scoreText = highScoreLabel.copy() as! SKLabelNode
         scoreText.text = "\(count)"
         scoreText.position.x = scoreboard.position.x - scoreboard.size.width * 0.235
@@ -116,7 +125,7 @@ class GameOver: SKScene {
         
     }
     
-    override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
         for touch: AnyObject in touches {
             
             let location = (touch as! UITouch).locationInNode(self)
