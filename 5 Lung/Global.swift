@@ -31,7 +31,7 @@ func scoreboardSize() -> CGSize {
 
 func bg(lights lights: Bool) -> SKSpriteNode {
     let screenSize = UIScreen.mainScreen().bounds
-    let texture = "Lights.png"
+    var texture = "Lights.png"
     if !lights {
         let texture = "No Lights.png"
     }
@@ -195,7 +195,6 @@ public class Global {
             self.name = name
             self.position.y = screenSize.height * 0.134
             self.position.x = screenSize.width * xpos
-            self.zPosition = 5
         }
         func touchDown() {
             self.position.y -= 4

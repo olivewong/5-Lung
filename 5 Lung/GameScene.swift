@@ -13,7 +13,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     let motionManager: CMMotionManager = CMMotionManager()
     
     let bg = SKSpriteNode(imageNamed: "No Lights.png")
-    let patrick = SKSpriteNode(imageNamed: "xmasgamestump.png")
+    let patrick = SKSpriteNode(imageNamed: "Patrick.png")
     var score = SKLabelNode(fontNamed: "Superclarendon-Light")
     let scoreBG = SKSpriteNode(imageNamed: "Score")
     
@@ -61,13 +61,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
         
         motionManager.startAccelerometerUpdates()
-        
-        let mountains = SKSpriteNode(imageNamed: "xmasgamescenemountains.png")
-        mountains.anchorPoint = CGPoint(x: 0.5, y: 0)
-        mountains.position = CGPoint(x: self.frame.size.width / 2, y: 0)
-        mountains.size = CGSize(width: self.frame.size.width, height: self.frame.size.width * 0.224)
-        mountains.zPosition = -1
-        self.addChild(mountains)
         
         count = 0
         let screenSize = UIScreen.mainScreen().bounds
@@ -147,15 +140,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         let width = self.frame.size.width
         let height = self.frame.size.height
         
-        let path = NSBundle.mainBundle().pathForResource("Snow", ofType: "sks")
-        let itSnow = NSKeyedUnarchiver.unarchiveObjectWithFile(path!) as! SKEmitterNode
-        itSnow.position = CGPoint(x: width / 2, y: self.size.height)
-        itSnow.zPosition = 4
-        itSnow.particlePositionRange = CGVector(dx: width, dy: height)
-        self.addChild(itSnow)
-        
         bg.size = self.frame.size
-        bg.zPosition = -2
+        bg.zPosition = -1
         bg.position = CGPointMake(width / 2, self.frame.size.height / 2)
         
         self.addChild(bg)
@@ -186,7 +172,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         }
 
         let left = SKShapeNode(rectOfSize: CGSize(width: 1, height: height))
-        left.position = CGPoint(x: -3, y: height / 2 + 7)
+        left.position = CGPoint(x: 0, y: height / 2 + 7)
         left.alpha = 0
         left.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 1, height: height))
         left.physicsBody?.affectedByGravity = false
@@ -196,8 +182,8 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         left.physicsBody?.collisionBitMask = physicsCategory.Trick
         self.addChild(left)
         
-        let right = left.copy() as! SKShapeNode
-        right.position.x = width + 3
+        var right = left.copy() as! SKShapeNode
+        right.position.x = width + 2
         self.addChild(right)
         
         scoreBG.size = CGSizeMake(155, 56)
@@ -217,7 +203,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         self.addChild(score)
         
         let stage = SKShapeNode(rectOfSize: CGSize(width: width + 10, height: height * 0.018))
-        stage.fillColor = SKColor(red: 64/255, green: 192/255, blue: 212/255, alpha: 0.05)
+        stage.fillColor = SKColor(red: 64/255, green: 192/255, blue: 212/255, alpha: 0.4)
         stage.position = CGPoint(x: width / 2, y: 0)
         stage.lineWidth = 0
         stage.zPosition = 0

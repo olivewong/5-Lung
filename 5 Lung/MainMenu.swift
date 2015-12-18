@@ -5,7 +5,7 @@ import AVFoundation
 var loadNumber: Int = 0
 class mainMenu: SKScene {
     
-    let patrick = SKSpriteNode(imageNamed: "xmassingingstump.png")
+    let patrick = SKSpriteNode(imageNamed: "singingpatrick.png")
     
     func changeScene(newScene: SKScene, transition: SKTransition) {
         newScene.scaleMode = scaleMode
@@ -13,7 +13,6 @@ class mainMenu: SKScene {
     }
     
     override func didMoveToView(view: SKView) {
-        
         
         loadNumber++
         
@@ -34,21 +33,6 @@ class mainMenu: SKScene {
             }
         }
         
-        let path = NSBundle.mainBundle().pathForResource("Snow", ofType: "sks")
-        let itSnow = NSKeyedUnarchiver.unarchiveObjectWithFile(path!) as! SKEmitterNode
-        itSnow.position = CGPoint(x: width / 2, y: self.size.height)
-        itSnow.zPosition = 4
-        itSnow.particlePositionRange = CGVector(dx: width, dy: height)
-        self.addChild(itSnow)
-        
-        let mountains = SKSpriteNode(imageNamed: "xmasmenumountains.png")
-        mountains.anchorPoint = CGPoint(x: 0.5, y: 0)
-        mountains.position = CGPoint(x: width / 2, y: 0)
-        mountains.size = CGSize(width: width, height: width * 0.65)
-        mountains.zPosition = 1
-        self.addChild(mountains)
-        
-        
         let q = Global.Button(texture: "q.png", name: "about", xpos: 0.75)
         self.addChild(q)
         
@@ -60,7 +44,7 @@ class mainMenu: SKScene {
         
         patrick.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.46)
         patrick.size = CGSizeMake(height * 0.187, height * 0.45)
-        patrick.zPosition = 3
+        patrick.zPosition = 5
         self.addChild(patrick)
         
         let title = SKSpriteNode(imageNamed: "Title.png")

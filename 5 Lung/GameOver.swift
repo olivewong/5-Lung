@@ -70,13 +70,6 @@ class GameOver: SKScene {
             defaults.setObject(count, forKey: "highScore")
         }
         
-        let mountains = SKSpriteNode(imageNamed: "xmasgamescenemountains.png")
-        mountains.anchorPoint = CGPoint(x: 0.5, y: 0)
-        mountains.position = CGPoint(x: self.frame.size.width / 2, y: 0)
-        mountains.size = CGSize(width: self.frame.size.width, height: self.frame.size.width * 0.224)
-        mountains.zPosition = 1
-        self.addChild(mountains)
-        
         if let totalScore = defaults.stringForKey("totalScore") {
             var boob = Int(totalScore)! + count
             totalLung = boob
