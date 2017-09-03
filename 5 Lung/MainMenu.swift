@@ -7,14 +7,14 @@ class mainMenu: SKScene {
     
     let patrick = SKSpriteNode(imageNamed: "singingpatrick.png")
     
-    func changeScene(newScene: SKScene, transition: SKTransition) {
+    func changeScene(_ newScene: SKScene, transition: SKTransition) {
         newScene.scaleMode = scaleMode
         self.view?.presentScene(newScene, transition: transition)
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         
-        loadNumber++
+        loadNumber += 1
         
         checkMusic()
         
@@ -43,7 +43,7 @@ class mainMenu: SKScene {
         self.addChild(music)
         
         patrick.position = CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height * 0.46)
-        patrick.size = CGSizeMake(height * 0.187, height * 0.45)
+        patrick.size = CGSize(width: height * 0.187, height: height * 0.45)
         patrick.zPosition = 5
         self.addChild(patrick)
         
@@ -54,32 +54,32 @@ class mainMenu: SKScene {
         self.addChild(title)
     }
     
-    override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            let nodey = self.nodeAtPoint(location)
-            if let myClass = nodey as? Global.Button {
+            let location = touch.location(in: self)
+            let node = self.atPoint(location)
+            if let myClass = node as? Global.Button {
                 myClass.touchDown()
             }
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
-            let nodey = self.nodeAtPoint(location)
+            let location = touch.location(in: self)
+            let nodey = self.atPoint(location)
             if let myClass = nodey as? Global.Button {
                 myClass.touchUp()
             }
             if let name = nodey.name {
                 if name == "play" {
                     let newScene = GameScene(size: self.size)
-                    changeScene(newScene, transition: SKTransition.revealWithDirection(.Up, duration: 1.5))
+                    changeScene(newScene, transition: SKTransition.reveal(with: .up, duration: 1.5))
                 } else if name == "about" {
-                    patrick.runAction(SKAction.moveTo(CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2 + 15), duration: 0.6))
+                    patrick.run(SKAction.move(to: CGPoint(x: self.frame.size.width / 2, y: self.frame.size.height / 2 + 15), duration: 0.6))
                     let newScene = about(size: self.size)
-                    self.changeScene(newScene, transition: SKTransition.crossFadeWithDuration(1.5))
+                    self.changeScene(newScene, transition: SKTransition.crossFade(withDuration: 1.5))
                 }
             }
         }

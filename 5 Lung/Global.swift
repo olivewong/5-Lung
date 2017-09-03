@@ -1,10 +1,4 @@
-//
-//  Global.swift
-//  5 Lung
-//
-//  Created by 😎 on 8/4/15.
-//  Copyright (c) 2015 neuky. All rights reserved.
-//
+
 
 import Foundation
 import SpriteKit
@@ -21,17 +15,17 @@ let blank = SKNode()
 
 
 func scoreboardSize() -> CGSize {
-    let screenSize = UIScreen.mainScreen().bounds
+    let screenSize = UIScreen.main.bounds
     var size: CGSize = CGSize(width: screenSize.width * 0.85, height: screenSize.width * 0.431)
-    if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+    if UIDevice.current.userInterfaceIdiom == .pad {
         size = CGSize(width: screenSize.width * 0.75, height: screenSize.width * 0.38)
     }
     return size
 }
 
-func bg(lights lights: Bool) -> SKSpriteNode {
-    let screenSize = UIScreen.mainScreen().bounds
-    var texture = "Lights.png"
+func bg(lights: Bool) -> SKSpriteNode {
+    let screenSize = UIScreen.main.bounds
+    let texture = "Lights.png"
     if !lights {
         let texture = "No Lights.png"
     }
@@ -39,33 +33,33 @@ func bg(lights lights: Bool) -> SKSpriteNode {
     background.size = CGSize(width: screenSize.width, height: screenSize.height)
     background.position = CGPoint(x: screenSize.width / 2, y: screenSize.height / 2)
     background.zPosition = -2
-    background.blendMode = .Replace
+    background.blendMode = .replace
     return background
 }
 
 func checkMusic() {
-    let defaults = NSUserDefaults.standardUserDefaults()
-    if let sound = defaults.stringForKey("music") {
+    let defaults = UserDefaults.standard
+    if let sound = defaults.string(forKey: "music") {
         if sound == "true" {
             musicOn = true
         } else {
             musicOn = false
         }
     } else {
-        defaults.setObject("true", forKey: "sound")
+        defaults.set("true", forKey: "sound")
         musicOn = true
     }
 }
 
-func prepareBackgroundMusic(filename: String) {
-    let url = NSBundle.mainBundle().URLForResource(
-        filename, withExtension: nil)
+func prepareBackgroundMusic(_ filename: String) {
+    let url = Bundle.main.url(
+        forResource: filename, withExtension: nil)
     if (url == nil) {
         return
     }
     var error: NSError? = nil
     do {
-        backgroundMusicPlayer = try AVAudioPlayer(contentsOfURL: url!)
+        backgroundMusicPlayer = try AVAudioPlayer(contentsOf: url!)
     } catch let error1 as NSError {
         error = error1
         backgroundMusicPlayer = nil
@@ -85,7 +79,7 @@ func playBackgroundMusic() {
 
 public func pauseBackgroundMusic() {
     if let player = backgroundMusicPlayer {
-        if player.playing {
+        if player.isPlaying {
             player.pause()
         }
     }
@@ -93,31 +87,31 @@ public func pauseBackgroundMusic() {
 
 func resumeBackgroundMusic() {
     if let player = backgroundMusicPlayer {
-        if !player.playing {
+        if !player.isPlaying {
             player.play()
         }
     }
 }
 
 func toggleSound() {
-    let defaults = NSUserDefaults.standardUserDefaults()
-    if let sound = defaults.stringForKey("sound") {
+    let defaults = UserDefaults.standard
+    if let sound = defaults.string(forKey: "sound") {
         if sound == "false" {
-            defaults.setObject("true", forKey: "sound")
+            defaults.set("true", forKey: "sound")
             soundOn = true
         } else {
-            defaults.setObject("false", forKey: "sound")
+            defaults.set("false", forKey: "sound")
             soundOn = false
         }
     } else {
-        defaults.setObject("false", forKey: "sound")
+        defaults.set("false", forKey: "sound")
         soundOn = false
     }
 }
 
 
-let url = NSBundle.mainBundle().URLForResource(
-    "lungtheme.mp3", withExtension: nil)
+let url = Bundle.main.url(
+    forResource: "lungtheme.mp3", withExtension: nil)
 /*
 
 init() {
@@ -132,14 +126,14 @@ init() {
 */
 
 func sickLungTunez() throws {
-    gameMusic = try AVAudioPlayer(contentsOfURL: url!)
+    gameMusic = try AVAudioPlayer(contentsOf: url!)
 }
 
 //var error: NSError? = nil
 //let gameMusic = AVAudioPlayer(contentsOfURL: url, error: &error)
 var gameMusicPlaying: Bool = false
 
-func changeMusic(node: SKScene) {
+func changeMusic(_ node: SKScene) {
     gameMusic.prepareToPlay()
     gameMusicPlaying = true
     gameMusic.numberOfLoops = -1
@@ -149,28 +143,28 @@ func changeMusic(node: SKScene) {
         gameMusic.play()
     }
     let time = backgroundMusicPlayer.currentTime
-    let remainding: NSTimeInterval = 8 - (time % 8) - 1.21
-    let wait = SKAction.waitForDuration(remainding)
+    let remainding: TimeInterval = 8 - (time.truncatingRemainder(dividingBy: 8)) - 1.21
+    let wait = SKAction.wait(forDuration: remainding)
     let seq = SKAction.sequence([
         wait,
-        SKAction.runBlock() {
+        SKAction.run() {
             gO()
         }
         ])
-    node.runAction(seq)
+    node.run(seq)
 }
 func toggleMusic() {
-    let defaults = NSUserDefaults.standardUserDefaults()
+    let defaults = UserDefaults.standard
     func stopMusic() {
-        defaults.setObject("false", forKey: "music")
+        defaults.set("false", forKey: "music")
         musicOn = false
         pauseBackgroundMusic()
         gameMusicPlaying = false
         gameMusic.pause()
     }
-    if let music = defaults.stringForKey("music") {
+    if let music = defaults.string(forKey: "music") {
         if music == "false" {
-            defaults.setObject("true", forKey: "music")
+            defaults.set("true", forKey: "music")
             musicOn = true
             if musicStarted == false {
                 playBackgroundMusic()
@@ -186,12 +180,12 @@ func toggleMusic() {
 }
 
 
-public class Global {
+open class Global {
     class Button: SKSpriteNode {
-        let screenSize = UIScreen.mainScreen().bounds
+        let screenSize = UIScreen.main.bounds
         init(texture: String, name: String, xpos: CGFloat) {
             let texture = SKTexture(imageNamed: texture)
-            super.init(texture: texture, color: SKColor.redColor(), size: CGSizeMake(CGFloat(screenSize.height * 0.11), CGFloat(screenSize.height * 0.11)))
+            super.init(texture: texture, color: SKColor.red, size: CGSize(width: CGFloat(screenSize.height * 0.11), height: CGFloat(screenSize.height * 0.11)))
             self.name = name
             self.position.y = screenSize.height * 0.134
             self.position.x = screenSize.width * xpos

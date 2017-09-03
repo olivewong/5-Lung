@@ -28,7 +28,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var lungPool: [SKSpriteNode] = []
     var pianoPool: [SKSpriteNode] = []
     
-    func xPos() -> CGFloat {
+    func determineXPos() -> CGFloat {
         var pos = CGFloat(arc4random_uniform(100))
         if pos > 70 {
             pos -= (CGFloat(arc4random_uniform(35)) + 9)
@@ -38,23 +38,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         pos = pos/100
         return pos
     }
-    func spinny() -> CGFloat {
-        var rot = CGFloat(arc4random_uniform(40)) / 10
+    func determineHowSpinny() -> CGFloat {
+        var angular_velocity = CGFloat(arc4random_uniform(40)) / 10
         if arc4random_uniform(2) == 1 {
-            rot = rot * -1
+            angular_velocity = angular_velocity * -1
         }
-        return rot
+        return angular_velocity
     }
     func lungSize() -> CGSize {
-        let screenSize = UIScreen.mainScreen().bounds
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            return(CGSizeMake(CGFloat(screenSize.width * 0.1), CGFloat(screenSize.width * 0.138)))
+        let screenSize = UIScreen.main.bounds
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            return(CGSize(width: CGFloat(screenSize.width * 0.1), height: CGFloat(screenSize.width * 0.138)))
         } else {
-            return(CGSizeMake(CGFloat(screenSize.width * 0.13), CGFloat(screenSize.width * 0.18)))
+            return(CGSize(width: CGFloat(screenSize.width * 0.13), height: CGFloat(screenSize.width * 0.18)))
         }
     }
     
-    override func didMoveToView(view: SKView) {
+    override func didMove(to view: SKView) {
         
         if musicOn {
             changeMusic(self)
@@ -63,25 +63,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         motionManager.startAccelerometerUpdates()
         
         count = 0
-        let screenSize = UIScreen.mainScreen().bounds
+        let screenSize = UIScreen.main.bounds
         
         class Lung: SKSpriteNode {
             
-            let screenSize = UIScreen.mainScreen().bounds
+            let screenSize = UIScreen.main.bounds
             init() {
-                super.init(texture: SKTexture(imageNamed: "Lung.png"), color: SKColor.blueColor(), size: GameScene().lungSize())
+                super.init(texture: SKTexture(imageNamed: "Lung.png"), color: SKColor.blue, size: GameScene().lungSize())
                 self.name = name
                 self.position = CGPoint(x: self.frame.size.width * GameScene().xPos(), y: self.frame.size.height + 80)
-                self.hidden = true
-                self.physicsBody = SKPhysicsBody(rectangleOfSize: self.size)
+                self.isHidden = true
+                self.physicsBody = SKPhysicsBody(rectangleOf: self.size)
                 self.physicsBody?.affectedByGravity = false
-                self.physicsBody?.dynamic = true
+                self.physicsBody?.isDynamic = true
                 self.name = "lung"
                 self.zPosition = 5
                 self.position = CGPoint(x: self.frame.size.width * GameScene().xPos(), y: self.frame.size.height + 80)
                 self.physicsBody?.usesPreciseCollisionDetection = true
                 self.physicsBody?.allowsRotation = true
-                self.physicsBody?.angularVelocity = GameScene().spinny()
+                self.physicsBody?.angularVelocity = GameScene().determineHowSpinny()
                 self.physicsBody?.categoryBitMask = physicsCategory.lung
                 self.physicsBody?.collisionBitMask = physicsCategory.None
                 self.physicsBody?.contactTestBitMask = physicsCategory.Trick | physicsCategory.Border
@@ -91,32 +91,32 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             }
         }
         
-        let lungz = SKNode()
-        self.addChild(lungz)
-        var lunPool: [Lung] = []
+        let lungHolder = SKNode()
+        self.addChild(lungHolder)
+        var lungs: [Lung] = []
         
 
-        var wait = SKAction.waitForDuration(1.6)
-        var run = SKAction.runBlock {
-            timer++
-            if lunPool.count > 1 {
-                lunPool.removeAtIndex(0)
+        var wait = SKAction.wait(forDuration: 1.6)
+        var fallingLungsAction = SKAction.run {
+            timer += 1
+            if lungs.count > 1 {
+                lungs.remove(at: 0)
             }
-            func lungg() {
-                var lun: Lung = Lung()
-                lun.position.x = self.frame.size.width * CGFloat(arc4random_uniform(76) + 12) / 100
-                lun.position.y = self.frame.size.height + 100
-                lun.hidden = false
-                lun.physicsBody?.affectedByGravity = true
-                lunPool.append(lun)
-                lungz.addChild(lun)
+            func positionLung() {
+                let lung: Lung = Lung()
+                lung.position.x = self.frame.size.width * CGFloat(arc4random_uniform(76) + 12) / 100
+                lung.position.y = self.frame.size.height + 100
+                lung.isHidden = false
+                lung.physicsBody?.affectedByGravity = true
+                lungs.append(lung)
+                lungHolder.addChild(lung)
             }
-            lungg()
+            positionLung()
         }
-        self.runAction(SKAction.repeatActionForever(SKAction.sequence([wait, run])))
+        self.run(SKAction.repeatForever(SKAction.sequence([wait, fallingLungsAction])))
         
         
-        func addLung(lung: Lung) {
+        func addLung(_ lung: Lung) {
             if arc4random_uniform(2) == 1{
                 lung.xScale = -1.0;
             }
@@ -129,10 +129,10 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
 
         backgroundColor = SKColor(red: 135/255, green: 206/255, blue: 250/255, alpha: 1.0)
         
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-            self.physicsWorld.gravity = CGVectorMake(0, -1.32)
+        if UIDevice.current.userInterfaceIdiom == .pad {
+            self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.32)
         } else {
-            self.physicsWorld.gravity = CGVectorMake(0, -0.97)
+            self.physicsWorld.gravity = CGVector(dx: 0, dy: -0.97)
         }
         physicsWorld.contactDelegate = self;
 
@@ -142,20 +142,20 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         
         bg.size = self.frame.size
         bg.zPosition = -1
-        bg.position = CGPointMake(width / 2, self.frame.size.height / 2)
+        bg.position = CGPoint(x: width / 2, y: self.frame.size.height / 2)
         
         self.addChild(bg)
         
         var patWidth = height * 0.1
         
-        if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+        if UIDevice.current.userInterfaceIdiom == .pad {
             patWidth = height * 0.115
         }
         patrick.size = CGSize(width: patWidth, height: patWidth * 2.38)
         patrick.position = CGPoint(x: self.frame.size.width / 2, y: (patrick.size.height / CGFloat(2) + 1.5))
-        patrick.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: patWidth * 0.9, height: patWidth * 0.9))
+        patrick.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: patWidth * 0.9, height: patWidth * 0.9))
         patrick.physicsBody?.friction = 0
-        patrick.physicsBody?.dynamic = true
+        patrick.physicsBody?.isDynamic = true
         patrick.physicsBody?.allowsRotation = false
         patrick.physicsBody?.affectedByGravity = false
         patrick.physicsBody?.categoryBitMask = physicsCategory.Trick
@@ -163,7 +163,6 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         patrick.physicsBody?.contactTestBitMask = physicsCategory.lung | physicsCategory.Border
         patrick.physicsBody?.mass = 0.03
         patrick.physicsBody?.restitution = 0.05
-        patrick.name = "mr. stump"
         self.addChild(patrick)
         
         var muspic = "Music"
@@ -171,38 +170,38 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
             muspic = "No Music"
         }
 
-        let left = SKShapeNode(rectOfSize: CGSize(width: 1, height: height))
+        let left = SKShapeNode(rectOf: CGSize(width: 1, height: height))
         left.position = CGPoint(x: 0, y: height / 2 + 7)
         left.alpha = 0
-        left.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: 1, height: height))
+        left.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: 1, height: height))
         left.physicsBody?.affectedByGravity = false
-        left.physicsBody?.dynamic = false
+        left.physicsBody?.isDynamic = false
         left.physicsBody?.categoryBitMask = physicsCategory.Border
         left.physicsBody?.contactTestBitMask = physicsCategory.None
         left.physicsBody?.collisionBitMask = physicsCategory.Trick
         self.addChild(left)
         
-        var right = left.copy() as! SKShapeNode
+        let right = left.copy() as! SKShapeNode
         right.position.x = width + 2
         self.addChild(right)
         
-        scoreBG.size = CGSizeMake(155, 56)
-        scoreBG.anchorPoint = CGPointMake(0, 1)
+        scoreBG.size = CGSize(width: 155, height: 56)
+        scoreBG.anchorPoint = CGPoint(x: 0, y: 1)
         scoreBG.position = CGPoint(x: 15, y: self.frame.size.height - 15)
         scoreBG.zPosition = 30
         self.addChild(scoreBG)
 
         score.position = CGPoint(x: scoreBG.size.width * 0.833 + 10, y: self.frame.size.height - 41)
-        if UIScreen.mainScreen().scale == 1.0 {
+        if UIScreen.main.scale == 1.0 {
             score.position = CGPoint(x: scoreBG.size.width * 0.833 + 14, y: self.frame.size.height - 40)
         }
         score.fontSize = 25
         score.text = "\(count)"
-        score.verticalAlignmentMode = .Center
+        score.verticalAlignmentMode = .center
         score.zPosition = 105
         self.addChild(score)
         
-        let stage = SKShapeNode(rectOfSize: CGSize(width: width + 10, height: height * 0.018))
+        let stage = SKShapeNode(rectOf: CGSize(width: width + 10, height: height * 0.018))
         stage.fillColor = SKColor(red: 64/255, green: 192/255, blue: 212/255, alpha: 0.4)
         stage.position = CGPoint(x: width / 2, y: 0)
         stage.lineWidth = 0
@@ -211,101 +210,102 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     
-    func returnLung(lung: SKNode) {
-        lung.runAction(
+    func returnLung(_ lung: SKNode) {
+        lung.run(
             SKAction.sequence([
-                SKAction.waitForDuration(0.1),
-                SKAction.runBlock() {
-                    lung.hidden = true
+                SKAction.wait(forDuration: 0.1),
+                SKAction.run() {
+                    lung.isHidden = true
                     lung.physicsBody?.affectedByGravity = false
-                    lung.position.y = UIScreen.mainScreen().bounds.height
+                    lung.position.y = UIScreen.main.bounds.height
                 }
                 ]))
     }
     func glow() {
-        let glowy = SKAction.colorizeWithColor(UIColor(red: 1.0, green: 217/255, blue: 226/255, alpha: 1.0), colorBlendFactor: CGFloat(0.25), duration: 0.2)
+        let glowy = SKAction.colorize(with: UIColor(red: 1.0, green: 217/255, blue: 226/255, alpha: 1.0), colorBlendFactor: CGFloat(0.25), duration: 0.2)
         let gloww = SKAction.sequence([
             glowy,
-            SKAction.colorizeWithColorBlendFactor(0, duration: 0.2),
+            SKAction.colorize(withColorBlendFactor: 0, duration: 0.2),
             ])
         if patrick.colorBlendFactor < 0.01 {
-            patrick.runAction(gloww)
+            patrick.run(gloww)
         }
     }
     func faster() {
+        // Make the game harder (objects fall faster) as the user progresses
         switch count {
         case 5:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -1.36)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.36)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -1.0)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.0)
             }
         case 15:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -1.5)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.5)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -1.05)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.05)
             }
         case 30:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -1.75)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.75)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -1.2)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.2)
             }
         case 62:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -2)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -2)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -1.4)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.4)
             }
         case 100:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -2.3)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -2.3)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -1.85)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -1.85)
             }
         case 150:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -2.7)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -2.7)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -2)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -2)
             }
         case 210:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -3)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -3)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -2.3)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -2.3)
             }
         case 350:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -3.2)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -3.2)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -2.5)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -2.5)
             }
         case 500:
-            if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
+            if UIDevice.current.userInterfaceIdiom == .pad {
                 //originally -1.35
-                self.physicsWorld.gravity = CGVectorMake(0, -3.6)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -3.6)
             } else {
-                self.physicsWorld.gravity = CGVectorMake(0, -2.9)
+                self.physicsWorld.gravity = CGVector(dx: 0, dy: -2.9)
             }
         default:
             ()
         }
     }
 
-    let shrink = SKAction.scaleBy(0.5, duration: 0.1)
+    let shrink = SKAction.scale(by: 0.5, duration: 0.1)
     let lungSound = SKAction.playSoundFileNamed("pop.mp3", waitForCompletion: false)
     let wallSound = SKAction.playSoundFileNamed("zap.wav", waitForCompletion: false)
-    func didBeginContact(contact: SKPhysicsContact) {
+    func didBegin(_ contact: SKPhysicsContact) {
         var contactBody1: SKPhysicsBody
         var contactBody2: SKPhysicsBody
         
@@ -319,9 +319,9 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         if((contactBody1.categoryBitMask == 1) && (contactBody2.categoryBitMask == 2)) {
             switch contactBody2.node!.name! {
             case "lung":
-                if !contactBody2.node!.hidden {
-                    runAction(lungSound)
-                    count++
+                if !contactBody2.node!.isHidden {
+                    run(lungSound)
+                    count += 1
                     faster()
                     if count > 99 {
                         score.fontSize = 20.5
@@ -334,13 +334,13 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 contactBody1.node!.physicsBody?.affectedByGravity = true
                 let newScene = GameOver(size: self.size)
                 newScene.scaleMode = scaleMode
-                let reveal = SKTransition.revealWithDirection(.Down, duration: 1.3)
+                let reveal = SKTransition.reveal(with: .down, duration: 1.3)
                 self.view?.presentScene(newScene, transition: reveal)
             default:
                 ()
             }
         } else if (contactBody1.categoryBitMask == 1) && (contactBody2.categoryBitMask == 4) {
-            runAction(wallSound)
+            run(wallSound)
         }
     }
     
@@ -348,17 +348,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     var findPiano = false
 
     
-    func moveLung(lung: SKSpriteNode) {
+    func moveLung(_ lung: SKSpriteNode) {
         lung.position.y = self.frame.size.height + CGFloat(arc4random_uniform(5) * 10 + 20)
-        lung.physicsBody?.angularVelocity = spinny()
-        lung.physicsBody?.velocity = CGVectorMake(0, 0);
-        lung.hidden = false
+        lung.physicsBody?.angularVelocity = determineHowSpinny()
+        lung.physicsBody?.velocity = CGVector(dx: 0, dy: 0);
+        lung.isHidden = false
         lung.position.x = self.frame.size.width * xPos()
         lung.physicsBody?.affectedByGravity = true
     }
     
     
-    func movePatrick(currentTime: CFTimeInterval) {
+    func movePatrick(_ currentTime: CFTimeInterval) {
         if let data = motionManager.accelerometerData {
             if (fabs(data.acceleration.x) > 0.17) {
                 /* iphone
@@ -371,27 +371,25 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
                 patrick.physicsBody!.applyForce(CGVectorMake(self.frame.size.width * 0.16 * CGFloat(data.acceleration.x), 0))
                 */
                 
-                if UIDevice.currentDevice().userInterfaceIdiom == .Pad {
-                    patrick.physicsBody!.applyImpulse(CGVectorMake(self.frame.size.width * 0.0006 * CGFloat(data.acceleration.x), 0))
-                    patrick.physicsBody!.applyForce(CGVectorMake(self.frame.size.width * 0.15 * CGFloat(data.acceleration.x), 0))
+                if UIDevice.current.userInterfaceIdiom == .pad {
+                    patrick.physicsBody!.applyImpulse(CGVector(dx: self.frame.size.width * 0.0006 * CGFloat(data.acceleration.x), dy: 0))
+                    patrick.physicsBody!.applyForce(CGVector(dx: self.frame.size.width * 0.15 * CGFloat(data.acceleration.x), dy: 0))
                 } else {
-                    patrick.physicsBody!.applyImpulse(CGVectorMake(self.frame.size.width * 0.001 * CGFloat(data.acceleration.x), 0))
-                    patrick.physicsBody!.applyForce(CGVectorMake(self.frame.size.width * 0.125 * CGFloat(data.acceleration.x), 0))
+                    patrick.physicsBody!.applyImpulse(CGVector(dx: self.frame.size.width * 0.001 * CGFloat(data.acceleration.x), dy: 0))
+                    patrick.physicsBody!.applyForce(CGVector(dx: self.frame.size.width * 0.125 * CGFloat(data.acceleration.x), dy: 0))
                 }
-                
-                // original patrick.physicsBody!.applyForce(CGVectorMake(110 * CGFloat(data.acceleration.x), 0))
             }
         }
     }
     
-    override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+    override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         
         for touch: AnyObject in touches {
-            let location = touch.locationInNode(self)
+            let location = touch.location(in: self)
         }
     }
     
-    func positioner(follow follow: Bool) -> CGFloat {
+    func positioner(follow: Bool) -> CGFloat {
         var n: CGFloat = (CGFloat(arc4random_uniform(60)) + 70)
         n = n/200
         if follow && Int(arc4random_uniform(2)) == 1 {
@@ -413,7 +411,7 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         piano.size = CGSize(width: pianoWidth, height: pianoWidth * 0.693)
         piano.position.y = self.frame.size.height + 90
         piano.position.x = positioner(follow: true)
-        piano.physicsBody = SKPhysicsBody(rectangleOfSize: CGSize(width: pianoWidth, height: piano.size.height * 0.66), center: CGPoint(x: 0.5, y: 0.83))
+        piano.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: pianoWidth, height: piano.size.height * 0.66), center: CGPoint(x: 0.5, y: 0.83))
         piano.name = "keys"
         piano.physicsBody?.usesPreciseCollisionDetection = true
         piano.physicsBody?.restitution = 0
@@ -428,16 +426,17 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
     }
     
     func pianoSeparated() -> Bool {
-        var poo: Bool = true
+        // Fixes issue where too many pianos are on the screen at once
+        var enoughSpace: Bool = true
         for piano in pianoPool {
             if piano.position.y > self.frame.size.height * 0.85 {
-                poo = false
+                enoughSpace = false
             }
         }
-        return poo
+        return enoughSpace
     }
     
-    override func update(currentTime: CFTimeInterval) {
+    override func update(_ currentTime: TimeInterval) {
         
         for lung in lungPool {
             if lung.position.y < 50 {
@@ -449,21 +448,23 @@ class GameScene: SKScene, SKPhysicsContactDelegate {
         for piano in pianoPool {
             if piano.position.y < -200 {
                 piano.removeFromParent()
-                pianoPool.removeAtIndex(i)
+                pianoPool.remove(at: i)
             }
         }
         
         score.text = "\(count)"
         
         movePatrick(currentTime)
-        let thing = Int(arc4random_uniform(100))
-        if thing % 2 == 0 {
-            switch thing {
+        
+        // Determine whether to spawn a new piano or lung
+        let diceRoll = Int(arc4random_uniform(100))
+        if diceRoll % 2 == 0 {
+            switch diceRoll {
                 case 1...3:
                     findLung = true
                     while findLung {
                         for i in 0...(lungPool.count-1) {
-                            if lungPool[i].hidden {
+                            if lungPool[i].isHidden {
                                 moveLung(lungPool[i])
                                 findLung = false
                                 break
