@@ -110,7 +110,6 @@ class GameOver: SKScene {
         
         self.addChild(highScoreLabel)
         
-        
         let scoreText = highScoreLabel.copy() as! SKLabelNode
         scoreText.text = "\(count)"
         scoreText.position.x = scoreboard.position.x - scoreboard.size.width * 0.235
@@ -122,14 +121,14 @@ class GameOver: SKScene {
         for touch: AnyObject in touches {
             
             let location = (touch as! UITouch).locationInNode(self)
-            let nodey = self.nodeAtPoint(location)
+            let node = self.nodeAtPoint(location)
             
-            if let butt = nodey as? overButton {
-                if butt.name == "restart" {
+            if let button = nodey as? overButton {
+                if button.name == "restart" {
                     let playAgain = GameScene(size: self.size)
                     changeScene(playAgain)
                     
-                } else if butt.name == "menu" {
+                } else if button.name == "menu" {
                     let menu = mainMenu(size: self.size)
                     changeScene(menu)
                 }
